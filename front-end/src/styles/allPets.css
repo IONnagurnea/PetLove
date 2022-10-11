@@ -1,0 +1,58 @@
+span {
+    text-decoration: none;
+    font-size: 14px;
+}
+.cscreen {
+    margin: auto;
+    padding: auto;
+    top: 20px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.cards {
+    display: flex;
+    justify-content: center; 
+    flex-wrap: wrap;    
+}
+
+
+.pcontainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    margin: 10px;
+}
+  
+.image {
+    display: flex;
+    align-content: space-around;
+}
+
+  
+.pcolum {
+    width: 100%;
+    height: 7vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.breed {
+    display: inline-flex;
+    align-items: flex-start;
+}
+
+.city {
+    display: inline-flex;
+}
+
+.price {
+    display: inline-flex;
+    align-items: flex-end;
+}

@@ -1,0 +1,54 @@
+h2 {
+    text-align: center;
+}
+
+.screen {
+    display: block;
+    margin: auto;
+    padding: auto;
+    margin-top: 50px;
+    height: 100vh;
+}
+
+.fContainer {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 35%;
+    height: 100%;
+    padding: 2em;  
+}
+
+.images {
+    margin-top: 30px;
+}
+
+.images label {
+    background-color: green;
+    color: aliceblue;
+    cursor: pointer;
+}
+ 
+.video {
+    margin-top: 15px;
+}
+
+.video label {
+    background-color: blue;
+    color: beige;
+    cursor: pointer;
+}
+
+.saveButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}

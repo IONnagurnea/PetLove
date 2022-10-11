@@ -1,0 +1,151 @@
+.petscreen {
+    display: flex;
+    margin-top: 20px;
+    height: 100%;
+    width: 100%;
+}
+
+.petcontainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    
+}
+
+.carousel {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    text-align: center; 
+    background-color: #555;
+    width: 100%;
+    height: 75vh;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+.carouselItem {
+    margin: auto;
+    padding: auto;
+}
+
+.photos {
+    width: 122vh;
+    height: 70vh;
+}
+
+.location {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25%;
+    margin-right: 25%;
+    padding: 10px;
+}
+
+.location span{
+    padding-left: 15px;
+}
+
+.contactButton {
+    padding-left: 10px;
+}
+
+.petDetails {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25%;
+    margin-right: 25%;
+    padding: 10px;
+    align-items: stretch;
+}
+
+.petColumns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 2em;  
+}
+
+.petDescription {
+    display: inline-block;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.descriptionItem {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    gap: 10px;
+    padding: 2em;  
+    margin-top: 10px; 
+}
+
+.payment {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background-color: azure;
+    border: 2px solid #000;
+    box-shadow: 24;
+    display: flex;
+    
+}
+
+.paymentElements {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+.stripeContainer {
+    background-color: #000;
+}
+
+.payment h2 {
+    margin-top: 50px;
+}
+
+.paymentButtons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 40px;
+}
+.faIcon {
+    width: 100px;
+    height: 35px;
+}
+
+.contactItems {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 200px;
+    background-color: lightblue;
+    border: 2px solid #000;
+    box-shadow: 24;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.contactItems b {
+    padding: 5px;
+}
