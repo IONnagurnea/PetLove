@@ -69,7 +69,7 @@ const MenuItem = styled.div`
   ${mobile({ fontSize: "12px", marginLeft: "10px" })}
 `;
 
-const Header = () => {
+const Header = ({setSearchBreed}) => {
 
   const { user, dispatch} = useContext(AuthContext);
 
@@ -80,14 +80,18 @@ const Header = () => {
     //toast(data.message);
   };
 
+  const handleChange = e => {
+    setSearchBreed(e.target.value.toLowerCase());
+  };
+
   return (
     <Container>
       <Wrapper>
         <Left>
           <Language>EN</Language>
           <SearchContainer>
-            <Input placeholder="Search for breeds" />
-            <Search style={{ color: "gray", fontSize: 16 }} />
+            <Input placeholder="Search for breeds" onChange={handleChange} />
+            <Search style={{ color: "gray", fontSize: 16 }}/>
           </SearchContainer>
           <Link style={{textDecoration: "none"}} to="/add-pet">
             <MenuItem>Add a pet</MenuItem>

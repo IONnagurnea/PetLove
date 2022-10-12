@@ -51,11 +51,11 @@ const PetForm = ({
                                 <option>Cat</option>
                         </select>
 
-                        <label>Bread</label>
+                        <label>Breed</label>
                         <input 
                             type="text" 
-                            placeholder="Bread" 
-                            id="bread"
+                            placeholder="Breed" 
+                            id="breed"
                             onChange={handleChange} 
                             required
                         />

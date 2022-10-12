@@ -15,7 +15,7 @@ const PaymentModal = ({openModal, setOpenModal, item}) => {
     const { user, stripeStatus, paypalStatus, dispatch } = useContext(AuthContext);
 
     //console.log("Stripe =>", stripeStatus);
-    
+
     useEffect(() => {
          payment();
     }, [stripeStatus, paypalStatus]);
@@ -31,7 +31,9 @@ const PaymentModal = ({openModal, setOpenModal, item}) => {
         };  
     };
 
-    
+    // useEffect(()=>{
+    //      dispatch({type:"CONTACT_HIDE"})
+    //  },[])
     // payment on stripe page with a page to redirect to
     // const handleStripe = async () => {
     //     try {
@@ -57,6 +59,12 @@ const PaymentModal = ({openModal, setOpenModal, item}) => {
 
    // change the payment state is user is leaving the page
    window.addEventListener('popstate', (e) => dispatch({type:"CONTACT_HIDE"}));
+
+   window.addEventListener("beforeunload", function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+    dispatch({type:"CONTACT_HIDE"})
+    });
 
     return (
         <>

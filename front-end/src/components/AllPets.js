@@ -25,7 +25,7 @@ const Image = styled.img`
     ${laptop({ width: "45vh"})}
 `;
 
-const AllPets = () => {
+const AllPets = ({searchBreed}) => {
   
   const [pets, setPets] = useState([]);
   const { loading } = useContext(AuthContext);
@@ -42,11 +42,9 @@ const AllPets = () => {
 
   return (
     <div className="cscreen">
-     {loading ? (
-       "Loading..."
-     ) : (
-      <div className="cards">
-       {pets.map((item) => (
+      {searchBreed &&  
+       <div className="cards">
+       {pets.map((item) => item.breed.toLowerCase()==searchBreed && (
         <Link to="/pet" state={{ item: {item}}} key={item.id}>
           <Pcard> 
             <div className="pcontainer" >
@@ -56,7 +54,7 @@ const AllPets = () => {
               <div className="pcolum">
                 <div className="breed">
                   <PetsIcon />
-                  <span>{item.bread}</span>
+                  <span>{item.breed}</span>
                 </div>
                 <div className="city">
                   <LocationOnIcon />
@@ -71,8 +69,37 @@ const AllPets = () => {
           </Pcard>
         </Link>
         ))} 
-      </div>
-     )}
+        </div> 
+      } 
+      {!searchBreed && (
+        <div className="cards">
+       {pets.map((item) => (
+        <Link to="/pet" state={{ item: {item}}} key={item.id}>
+          <Pcard> 
+            <div className="pcontainer" >
+              <div className="image">
+                <Image src={item.image_url[0]} alt="pet profile image" /> 
+              </div>
+              <div className="pcolum">
+                <div className="breed">
+                  <PetsIcon />
+                  <span>{item.breed}</span>
+                </div>
+                <div className="city">
+                  <LocationOnIcon />
+                  <span>{item.city}</span>
+                </div>
+                <div className="price">
+                  <CurrencyPoundIcon />
+                  <span>{item.price}</span>
+                </div>
+              </div>
+            </div>
+          </Pcard>
+        </Link>
+        ))} 
+        </div>
+       )}
     </div>
   );
 };

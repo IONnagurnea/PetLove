@@ -142,15 +142,15 @@ const removeVideo = async (req, res) => {
 
 const postPets = async(req, res) => {
     console.log(req.body);
-    const { name, type, bread, gender, age, origin, colour, description, licence, price, vaccinated, images, video} = req.body;
+    const { name, type, breed, gender, age, origin, colour, description, licence, price, vaccinated, images, video} = req.body;
     // const { images.Location } = req.body;
     // const { video.Location } = req.body;
     const userId = req.body.user.id;
     console.log(userId);
     try {
         const createPet =  await pool.query(
-            "INSERT INTO pets (users_id, name, type, gender, age, bread, origin, colour, description, licence, price, vaccinated, image_url, video_url) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning *",
-            [userId, name, type, gender, age, bread, origin, colour, description, licence, price, vaccinated, images, video]
+            "INSERT INTO pets (users_id, name, type, gender, age, breed, origin, colour, description, licence, price, vaccinated, image_url, video_url) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) returning *",
+            [userId, name, type, gender, age, breed, origin, colour, description, licence, price, vaccinated, images, video]
           );
           console.log(createPet);
           res.status(201).json({
@@ -166,7 +166,7 @@ const postPets = async(req, res) => {
 
 const getPets = async(req, res) => {
     try {
-        const allPets = await pool.query("SELECT pets.id, pets.name, pets.type, pets.gender, pets.age, pets.bread, pets.price, pets.origin, pets.colour, pets.description, pets.licence, pets.vaccinated, pets.image_url, pets.video_url, users.first_name, users.phone, city FROM pets INNER JOIN users on pets.users_id = users.id");
+        const allPets = await pool.query("SELECT pets.id, pets.name, pets.type, pets.gender, pets.age, pets.breed, pets.price, pets.origin, pets.colour, pets.description, pets.licence, pets.vaccinated, pets.image_url, pets.video_url, users.first_name, users.phone, city FROM pets INNER JOIN users on pets.users_id = users.id");
         //console.log('db users =>', allPets);
         res.status(200).json(allPets.rows);
     } catch (err) {

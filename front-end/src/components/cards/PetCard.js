@@ -11,7 +11,7 @@ import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import Button from '@mui/material/Button';
 import PaymentModal from "../modals/PaymentModal";
-import { useLoaction, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const PetCard = ({item}) => {
 
@@ -23,10 +23,6 @@ const PetCard = ({item}) => {
 
   const navigate = useNavigate();
   
-  // useEffect(() => {
-  //   
-  // }, []);
-
   const handleClick = () => {
     if(user === null) navigate("/signin");
     setOpenModal(true);
@@ -91,7 +87,7 @@ const PetCard = ({item}) => {
 
             <div className="petDetails">
                 <div className="petColumns">
-                    <span><b>Bread:</b> {item.item.bread}</span>
+                    <span><b>Breed:</b> {item.item.breed}</span>
                     <span><b>Gender:</b> {item.item.gender}</span>
                     <span><b>Age:</b> {item.item.age} years old</span>
                     <span><b>Colour:</b> {item.item.colour}</span>
