@@ -3,6 +3,7 @@ const { hashPassword, comparePassword } = require('../utils/auth');
 const jwt = require("jsonwebtoken");
 const AWS = require('aws-sdk');
 const nanoid = require('nanoid');
+const createError = require('http-errors');
 
 const awsConfig = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -38,8 +39,9 @@ const register = async(req, res) => {
         const hashedPassword = await hashPassword(password);
         const results = await pool.query(
             "INSERT INTO users (first_name , last_name, email, password, city, county, phone) values ($1, $2, $3, $4, $5, $6, $7) returning *",
-            [firstName, lastName, email, hashedPassword, city, county, phone]
+            [firstName.charAt(0).toUpperCase() + firstName.slice(1), lastName.charAt(0).toUpperCase() + lastName.slice(1), email, hashedPassword, city.charAt(0).toUpperCase() + city.slice(1), county.charAt(0).toUpperCase() + county.slice(1), phone]
           );
+          
           console.log(results);
           res.status(201).json({
             status: "succes",
@@ -61,11 +63,11 @@ const login = async(req, res) => {
             "Select * From users Where email = $1",
             [email]
         );
-        //console.log(user.rows[0].password);
-       
+        //console.log(user);
+        if (user.rowCount !== 1) throw createError(401, 'Incorrect email or password');
         // check password
         const match = await comparePassword(password, user.rows[0].password);
-        if(!match) return res.status(400).send('Wrong password');
+        if(!match) throw createError(402, 'Incorrect email or password');
         // create signed jwt
         const token = jwt.sign({id: user.id}, process.env.JWT_SECRET, {
             expiresIn: "7d",
@@ -78,10 +80,10 @@ const login = async(req, res) => {
             // secure: true, // only works on https
         });
         // send user as json response
-        res.json(user.rows[0]);
+        return res.json(user.rows[0]);
     } catch (err) {
-        console.log(err);
-        return res.status(400).send("Error. Try again.");
+        //console.log(err);
+        return res.status(400).send(err);
     }
 };
 
@@ -103,7 +105,9 @@ const forgotPassword = async (req, res) => {
             "UPDATE users SET passwordResetCode = $1 WHERE email = $2",
             [shortCode, email]
         );
-        if(!user) return res.status(400).send("User not found");
+
+        // check if user exist
+        if (user.rowCount !== 1) throw createError(401, "User not found");
 
         //prepare for email
         const params = {
@@ -133,31 +137,35 @@ const forgotPassword = async (req, res) => {
         };
         const emailSent = SES.sendEmail(params).promise();
         emailSent.then((data) => {
-            console.log(data);
-            res.json({ok: true});
+            //console.log(data);
+            return res.json({ok: true});
         })
         .catch((err) => {
             console.log(err);
         })
     } catch (err) {
-        console.log(err);
+        console.log(err)
+        return res.status(400).send(err);
     }
 };
 
 const resetPassword  = async (req, res) => {
     try {
         const {email, code, newPassword} = req.body;
-        //console.table({email, code, newPassword});
+        console.table({email, code, newPassword});
         const hashedPassword = await hashPassword(newPassword);
 
         const user = await pool.query(
-            "UPDATE users SET password = $1 WHERE email = $2 and passwordResetCode = $3 ",
+            "UPDATE users SET password = $1 WHERE (email = $2 AND passwordresetcode = $3)",
             [hashedPassword, email, code]
         );
-        res.json({ ok:true });
+
+        //console.log(user);
+        if (user.rowCount === 1) return res.status(201).json({ok: true}) 
+            throw createError(401, "Wrong code or email");
     } catch (err) {
-        console.log(err);
-        return res.status(400).send('Error! Try again.');
+        //console.log(err);
+        return res.status(400).send(err);
     }
 }
 

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext} from 'react';
 import axios from 'axios';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-//import {toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const ForgotPawwsord = () => {
@@ -11,6 +11,7 @@ const ForgotPawwsord = () => {
     const [success, setSuccess] = useState(false);
     const [code, setCode] = useState('')
     const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     // context
@@ -29,11 +30,12 @@ const ForgotPawwsord = () => {
         try {
             const { data } = await axios.post("/forgot-password", { email });
             setSuccess(true);
-            //toast("Check your email for secret code");
+            toast("Check your email for secret code");
             setLoading(false);
         } catch (err) {
+            console.log("Error => ", err.response.data.message);
             setLoading(false);
-            //toast(err.response.data);
+            toast("User not found");
             
         }
     };
@@ -41,7 +43,12 @@ const ForgotPawwsord = () => {
     const handleResetPassword = async(e) => {
         e.preventDefault();
         // console.log(email, code, newPassword);
-        // return;
+       
+        if (newPassword !== confirmNewPassword) {
+            toast.error('Passwords do not match');
+            return;
+        };
+
         try {
             setLoading(true);
             const {data} = await axios.post('/reset-password', { 
@@ -53,11 +60,12 @@ const ForgotPawwsord = () => {
             setCode('');
             setNewPassword('');
             setLoading(false);
-            //toast("Great! Now you can login with your new password");
+            toast("Great! Now you can login with your new password");
             navigate('/signin');
         } catch (err) {
+            console.log("Error =>", err.response.data.message);
             setLoading(false);
-            //toast(err.response.data);
+            toast("Wrong code or email!");
         }
     };
 
@@ -92,6 +100,14 @@ const ForgotPawwsord = () => {
                         value={newPassword} 
                         onChange={(e) => setNewPassword(e.target.value)}
                         placeholder = "Enter new password"
+                        required
+                        />
+                        <input  
+                        type="password" 
+                        className="form-control mb-4 p-2" 
+                        value={confirmNewPassword} 
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                        placeholder = "Confirm new password"
                         required
                         />
                       </>

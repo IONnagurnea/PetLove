@@ -42,7 +42,7 @@ const AddPet = () => {
     }, [user]);
 
     const handleChange = (e) => {
-        setPets(prev=>({ ...prev, [e.target.id]: e.target.value }))
+        setPets(prev=>({ ...prev, [e.target.id]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1) }))
     }
 
     const  handleImage = async (e) => {

@@ -128,7 +128,7 @@ const Register = () => {
                     required
                 />
                 <input 
-                    type="text" 
+                    type="tel" 
                     className="rInput" 
                     placeholder="Your Phone" 
                     id="phone"

@@ -1,3 +1,35 @@
+.nav-links {
+    padding: 12px 180px;
+    background: #56009b;
+    color: white;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    margin: 0;
+}
+  
+.nav-link {
+    color: white;
+    text-decoration: none;
+    border-radius: 18px;
+    padding-left: 24px;
+    font-size: 18px;
+}
+
+.nav-button {
+    background: #56009b;
+    color: white;
+    border: none;
+}
+
+.nav-button:active {
+    color: green;
+}
+
+.nav-link-active {
+    background: #320059;
+}
+
 span {
     text-decoration: none;
     font-size: 14px;

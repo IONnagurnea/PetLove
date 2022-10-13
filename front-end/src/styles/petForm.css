@@ -25,6 +25,10 @@ h2 {
     padding: 2em;  
 }
 
+.column input, textarea{
+    text-transform: capitalize; 
+}
+
 .images {
     margin-top: 30px;
 }

@@ -25,9 +25,10 @@ const Image = styled.img`
     ${laptop({ width: "45vh"})}
 `;
 
-const AllPets = ({searchBreed}) => {
+const AllPets = ({searchBreed, setSearchBreed}) => {
   
   const [pets, setPets] = useState([]);
+  const [type, setType] = useState('');
   const { loading } = useContext(AuthContext);
 
   useEffect(() => {
@@ -40,12 +41,45 @@ const AllPets = ({searchBreed}) => {
       setPets(response.data);  
   };
 
+  // getting pet type buttons
+  const arr = pets.map((item) => item.type).filter((value, index, self) => self.indexOf(value) === index);
+  
+  // show all pets 
+  const handleClick = (e) => {
+    setSearchBreed("");
+    setType("");
+  }
+
   return (
+   <>
+    <div>
+      <ul className="nav-links">
+        <li key="all">
+          <button
+             onClick={handleClick} 
+             className={"nav-button"}
+          >
+            All Pets
+          </button>
+        </li>
+    
+        {arr.map((item) => (
+          <li key={item} >
+            <button 
+              onClick={() => setType(item)} 
+              className="nav-button"
+            >
+            {item}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
     <div className="cscreen">
       {searchBreed &&  
        <div className="cards">
        {pets.map((item) => item.breed.toLowerCase()==searchBreed && (
-        <Link to="/pet" state={{ item: {item}}} key={item.id}>
+         <Link to="/pet" state={{ item: {item}}} key={item.id}>
           <Pcard> 
             <div className="pcontainer" >
               <div className="image">
@@ -71,10 +105,39 @@ const AllPets = ({searchBreed}) => {
         ))} 
         </div> 
       } 
-      {!searchBreed && (
+      {type &&  
+       <div className="cards">
+       {pets.map((item) => item.type==type && (
+         <Link to="/pet" state={{ item: {item}}} key={item.id}>
+          <Pcard> 
+            <div className="pcontainer" >
+              <div className="image">
+                <Image src={item.image_url[0]} alt="pet profile image" /> 
+              </div>
+              <div className="pcolum">
+                <div className="breed">
+                  <PetsIcon />
+                  <span>{item.breed}</span>
+                </div>
+                <div className="city">
+                  <LocationOnIcon />
+                  <span>{item.city}</span>
+                </div>
+                <div className="price">
+                  <CurrencyPoundIcon />
+                  <span>{item.price}</span>
+                </div>
+              </div>
+            </div>
+          </Pcard>
+        </Link>
+        ))} 
+        </div> 
+      } 
+      {!searchBreed && !type && (
         <div className="cards">
        {pets.map((item) => (
-        <Link to="/pet" state={{ item: {item}}} key={item.id}>
+         <Link to="/pet" state={{ item: {item}}} key={item.id}>
           <Pcard> 
             <div className="pcontainer" >
               <div className="image">
@@ -101,6 +164,7 @@ const AllPets = ({searchBreed}) => {
         </div>
        )}
     </div>
+   </>
   );
 };
 

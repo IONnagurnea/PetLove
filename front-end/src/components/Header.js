@@ -5,6 +5,7 @@ import { mobile } from "../utils/responsive";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import {toast} from 'react-toastify';
 
 
 const Container = styled.div`
@@ -76,8 +77,8 @@ const Header = ({setSearchBreed}) => {
   const logout = async() => {
     dispatch({type: "LOGOUT"});
     window.localStorage.removeItem("user");
-    const {data} = await axios.get("/api/logout");
-    //toast(data.message);
+    const {data} = await axios.get("/logout");
+    toast(data.message);
   };
 
   const handleChange = e => {

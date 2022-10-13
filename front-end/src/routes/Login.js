@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/login.css";
 import Header from "../components/Header";
-//import {toast} from 'react-toastify';
+import {toast} from 'react-toastify';
+
 
 const Login =() => {
     const [credentials, setCredentials] = useState({
@@ -29,12 +30,14 @@ const Login =() => {
         dispatch({type:"LOGIN_START"});
         try {
             const res = await axios.post("/login", credentials);
+            //console.log(res.data);
             dispatch({type:"LOGIN_SUCCESS", payload: res.data});
             navigate("/");
+            toast.success("You are logged in")
         } catch (err) {
-            dispatch({type:"LOGIN_FAILURE", payload: err.response.data});
-            console.log(err);
-            //toast.error(err.response.data);
+            console.log("this error =>", err.response.data.message);
+            dispatch({type:"LOGIN_FAILURE", payload: err.response.data.message} );
+            toast(error);
         }
     }
     
@@ -50,6 +53,7 @@ const Login =() => {
                     id="email" 
                     onChange={handleChange} 
                     className="lInput" 
+                    required
                 />
                 <input 
                     type="password" 
@@ -57,6 +61,7 @@ const Login =() => {
                     id="password" 
                     onChange={handleChange} 
                     className="lInput" 
+                    required
                 />
                 <button 
                     type="submit" 
@@ -65,6 +70,7 @@ const Login =() => {
                 >
                     Login
                 </button>
+
                 {error && <span>{error.message}</span>}
             
                 <p className="text-center p-3">

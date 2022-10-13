@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
       <Header setSearchBreed={setSearchBreed}/>
-      <AllPets searchBreed={searchBreed}/>
+      <AllPets searchBreed={searchBreed} setSearchBreed={setSearchBreed}/>
     </div>
   );
 };

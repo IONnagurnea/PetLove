@@ -21,9 +21,14 @@ h2 {
     height: 15px;
     padding: 10px;
   }
+
   .rInput{
     height: 15px;
     padding: 5px;
+  }
+  
+  .rInput[type=text]{
+    text-transform: capitalize;
   }
   
   .lButton {

@@ -78,7 +78,7 @@ const PaymentModal = ({openModal, setOpenModal, item}) => {
             >
                 <div className="payment">
                     <div className="paymentElements">
-                        <h2>You will be charged £10 to get this breader phone number</h2>
+                        <h2>You will be charged £10 to get this breeder phone number</h2>
                         <div className="stripeContainer"><StripeContainer /></div>
                         <div className="paymentButtons">
                             <Paypal />
@@ -108,7 +108,7 @@ const PaymentModal = ({openModal, setOpenModal, item}) => {
                        <b>{item.item.first_name}:</b>
                        <b>{item.item.phone}</b>  
                     </span>
-                    <p>This details are sent to your email also</p>   
+                    <p>These details are also sent to your email address</p>   
                 </div>
             </Modal>
         </>
