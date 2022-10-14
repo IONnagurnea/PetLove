@@ -8,6 +8,7 @@ import PhoneInput from 'react-phone-number-input';
 import { Country, State, City }  from 'country-state-city';
 import Select from "react-select";
 import 'react-phone-number-input/style.css';
+import Dialogue from '../components/modals/Dialogue';
 //import {toast} from 'react-toastify';
 
 const Register = () => {
@@ -26,6 +27,7 @@ const Register = () => {
     })
 
     const [phone, setPhone] = useState("");
+    const [showDialogue, setShowDialogue] = useState(false);
   
     const { user, loading, error, dispatch } = useContext(AuthContext);
 
@@ -66,15 +68,31 @@ const Register = () => {
  
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (details.password !== details.confirmPassword) {
-            //toast.error('Passwords do not match');
+        if (!details.password.length >= "8") {
+            //toast.error('Passwords must contain at least 8 characters');
             return;
-          };
+        };
+        if (!details.password.match(/[A-Z]/)) {
+            //toast.error('Password must contain at least 1 uppercase letter');
+            return;
+        };
+        if(!details.password.match(/[a-z]/)) {
+            //toast.error('Password must contain at least 1 lowercase letter');
+            return;
+        };
+        if(!details.password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) {
+            //toast.error('Password must contain at least 1 special character');
+            return;
+        }
+        if (details.password !== details.confirmPassword && details.password === " ") {
+            //toast.error('Passwords and confirm passwor do not match');
+            return;
+        };
         if (phone.length !== 13) {
             //toast.error('Insert a valid phone number');
             console.log("phone not valid =>", phone.length);
             return;
-          }
+        }
         try {
             const results = await axios.post("/register",
             {details, address, phone}
@@ -117,6 +135,7 @@ const Register = () => {
                     className="rInput" 
                     placeholder="First Name" 
                     id="firstName"
+                    onFocus={()=>setShowDialogue(false)}
                     onChange={handleChange} 
                     required
                 />
@@ -125,6 +144,7 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Last Name" 
                     id="lastName"
+                    onFocus={()=>setShowDialogue(false)}
                     onChange={handleChange} 
                     required
                 />
@@ -133,6 +153,7 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Enter email" 
                     id="email"
+                    onFocus={()=>setShowDialogue(false)}
                     onChange={handleChange} 
                     required
                 />
@@ -141,7 +162,10 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Enter password" 
                     id="password"
+                    onFocus={()=>setShowDialogue(true)}
                     onChange={handleChange} 
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
+                    title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                     required
                 />
                 <input 
@@ -149,14 +173,17 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Confirm password" 
                     id="confirmPassword"
+                    onFocus={()=>setShowDialogue(true)}
                     onChange={handleChange} 
                     required
                 />
+                <Dialogue details={details} showDialogue={showDialogue} setShowDialogue={setShowDialogue}/>
                 <Select
                     className="rSelect"  
                     id="country"
                     name="country"
                     label="country"
+                    onFocus={()=>setShowDialogue(false)}
                     options={updatedCountries}
                     value={address.country}
                     onChange={(value) => {
@@ -168,6 +195,7 @@ const Register = () => {
                     className="rSelect"  
                     id="state"
                     name="state"
+                    onFocus={()=>setShowDialogue(false)}
                     options={updatedStates(address.country ? address.country.isoCode : null)}
                     value={address.state}
                     onChange={(value) => {
@@ -179,6 +207,7 @@ const Register = () => {
                     className="rSelect" 
                     id="city"
                     name="city"
+                    onFocus={()=>setShowDialogue(false)}
                     options={updatedCities(address.state ? (address.state.countryCode, address.state.isoCode) : (null))}
                     value={address.city}
                     onChange={(value) => {
@@ -189,6 +218,7 @@ const Register = () => {
                 <PhoneInput 
                     className="rInput" 
                     placeholder="Enter phone number" 
+                    onFocus={()=>setShowDialogue(false)}
                     onChange={(value) => setPhone(value)} 
                     required
                 />
