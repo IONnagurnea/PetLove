@@ -16,15 +16,23 @@ h2 {
     gap: 10px;
     width: 25%;
   }
-  
-  .lInput{
-    height: 15px;
+
+  #rContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 25%;
+    height: 100vh;
+  }
+
+  .lContainer .lInput{
+    height: 40px;
     padding: 10px;
   }
 
-  .rInput{
-    height: 15px;
-    padding: 5px;
+  #rContainer .rInput{
+    height: 40px;
+    padding: 10px;
   }
   
   .rInput[type=text]{

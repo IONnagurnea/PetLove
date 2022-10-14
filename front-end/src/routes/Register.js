@@ -4,6 +4,10 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/login.css";
 import Header from "../components/Header";
+import PhoneInput from 'react-phone-number-input';
+import { Country, State, City }  from 'country-state-city';
+import Select from "react-select";
+import 'react-phone-number-input/style.css';
 //import {toast} from 'react-toastify';
 
 const Register = () => {
@@ -13,10 +17,15 @@ const Register = () => {
         email: " ",
         password: " ",
         confirmPassword: " ",
-        city: " ",
-        county: " ",
-        phone: " "
     })
+
+    const [address, setAddress] = useState({
+        country: " ",
+        state: null,
+        city: null
+    })
+
+    const [phone, setPhone] = useState("");
   
     const { user, loading, error, dispatch } = useContext(AuthContext);
 
@@ -26,24 +35,49 @@ const Register = () => {
         if (user !== null) navigate("/signin");
     }, [user]);
 
+   
+    const updatedCountries = Country.getAllCountries().map((country) => ({
+        label: country.name,
+        value: country.isoCode,
+        ...country
+    }));
+
+    const updatedStates = (countryCode) =>
+        State
+          .getStatesOfCountry(countryCode)
+          .map((state) => ({ label: state.name, value: state.isoCode, ...state }));
+    const updatedCities = (countryCode, stateCode) =>
+        City
+          .getCitiesOfState(countryCode, stateCode)
+          .map((city) => ({ label: city.name, value: city.isoCode, ...city }));
+    
+
     const handleChange = (e) => {
         setDetails(prev=>({ ...prev, [e.target.id]: e.target.value }))
     }
-
+    console.log(phone);
+ //console.log(details);
+//  console.log("state =>", State.getStatesOfCountry(address.country.isoCode));
+//  console.log("city =>", City.getCitiesOfState(address.state.countryCode, address.state.isoCode));
+//  console.log(address.country.isoCode);
+//  console.log(address.state.isoCode);
+//  console.log(address.state.countryCode);
+    //console.log(address.country.name);
+ 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (details.password !== details.confirmPassword) {
             //toast.error('Passwords do not match');
             return;
           };
-        if (details.phone.length !== 11) {
+        if (phone.length !== 13) {
             //toast.error('Insert a valid phone number');
-            console.log("phone not valid =>", details.phone.length);
+            console.log("phone not valid =>", phone.length);
             return;
           }
         try {
             const results = await axios.post("/register",
-            details
+            {details, address, phone}
             );
             //toast.success('Registration succesful. Please login.');
             
@@ -53,10 +87,17 @@ const Register = () => {
                 email: " ",
                 password: " ",
                 confirmPassword: " ",
-                city: " ",
-                county: " ",
+                country: " ",
+                city: null,
+                county: null,
                 phone: " "
             });
+            setAddress({
+                country: " ",
+                state: null,
+                city: null
+            });
+            setPhone ("");
             dispatch({ type: 'LOGIN_START'});
             navigate("../signin");    
         } catch (err) {
@@ -69,7 +110,7 @@ const Register = () => {
     <div>  
         <Header />
         <div className="login">
-            <form className="lContainer" onSubmit={handleSubmit}>
+            <form id="rContainer" onSubmit={handleSubmit}>
                 <h2>Register</h2>
                 <input 
                     type="text" 
@@ -111,28 +152,44 @@ const Register = () => {
                     onChange={handleChange} 
                     required
                 />
-                <input 
-                    type="text" 
-                    className="rInput" 
-                    placeholder="City" 
+                <Select
+                    className="rSelect"  
+                    id="country"
+                    name="country"
+                    label="country"
+                    options={updatedCountries}
+                    value={address.country}
+                    onChange={(value) => {
+                        setAddress({ country: value, state: null, city: null }, false);
+                      }} 
+                    required
+                />
+                <Select
+                    className="rSelect"  
+                    id="state"
+                    name="state"
+                    options={updatedStates(address.country ? address.country.isoCode : null)}
+                    value={address.state}
+                    onChange={(value) => {
+                        setAddress({ country: address.country, state: value, city: null }, false)
+                        }} 
+                    required
+                />
+                <Select 
+                    className="rSelect" 
                     id="city"
-                    onChange={handleChange} 
+                    name="city"
+                    options={updatedCities(address.state ? (address.state.countryCode, address.state.isoCode) : (null))}
+                    value={address.city}
+                    onChange={(value) => {
+                        setAddress({ country: address.country, state: address.state, city: value })
+                        }} 
                     required
                 />
-                <input 
-                    type="text" 
+                <PhoneInput 
                     className="rInput" 
-                    placeholder="County" 
-                    id="county"
-                    onChange={handleChange} 
-                    required
-                />
-                <input 
-                    type="tel" 
-                    className="rInput" 
-                    placeholder="Your Phone" 
-                    id="phone"
-                    onChange={handleChange} 
+                    placeholder="Enter phone number" 
+                    onChange={(value) => setPhone(value)} 
                     required
                 />
                 <button 
