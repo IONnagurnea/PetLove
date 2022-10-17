@@ -50,7 +50,7 @@ const Register = () => {
           .map((state) => ({ label: state.name, value: state.isoCode, ...state }));
     const updatedCities = (countryCode, stateCode) =>
         City
-          .getCitiesOfState(countryCode, stateCode)
+          .getCitiesOfCountry(countryCode)
           .map((city) => ({ label: city.name, value: city.isoCode, ...city }));
     
 
@@ -58,11 +58,11 @@ const Register = () => {
         setDetails(prev=>({ ...prev, [e.target.id]: e.target.value }))
     }
     console.log(phone);
- //console.log(details);
+ //console.log("countries =>", Country.getAllCountries());
 //  console.log("state =>", State.getStatesOfCountry(address.country.isoCode));
-//  console.log("city =>", City.getCitiesOfState(address.state.countryCode, address.state.isoCode));
-//  console.log(address.country.isoCode);
-//  console.log(address.state.isoCode);
+//  console.log("city =>", City.getCitiesOfState(address.state.countryCode, "ENG"));
+//  console.log(address.country);
+//  console.log(address.state);
 //  console.log(address.state.countryCode);
     //console.log(address.country.name);
  
@@ -208,7 +208,7 @@ const Register = () => {
                     id="city"
                     name="city"
                     onFocus={()=>setShowDialogue(false)}
-                    options={updatedCities(address.state ? (address.state.countryCode, address.state.isoCode) : (null))}
+                    options={updatedCities(address.state ? (address.state.countryCode) : (null))}
                     value={address.city}
                     onChange={(value) => {
                         setAddress({ country: address.country, state: address.state, city: value })
