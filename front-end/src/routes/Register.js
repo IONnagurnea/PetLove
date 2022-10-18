@@ -65,7 +65,7 @@ const Register = () => {
     //console.log(address.country);
     //console.log(address.state);
     //console.log(address.state.countryCode);
-    console.log(address.city.name);
+    //console.log(address.city.name);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -167,6 +167,7 @@ const Register = () => {
                     onChange={handleChange} 
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
                     title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                    autoComplete="on"
                     required
                 />
                 <input 
@@ -176,6 +177,7 @@ const Register = () => {
                     id="confirmPassword"
                     onFocus={()=>setShowDialogue(true)}
                     onChange={handleChange} 
+                    autoComplete="on"
                     required
                 />
                 <Dialogue details={details} showDialogue={showDialogue} setShowDialogue={setShowDialogue}/>
