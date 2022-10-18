@@ -25,17 +25,6 @@ const register = async(req, res) => {
         // console.log(state.name);
         // console.log(city);
         //return;
-        // if(!firstName) return res.status(400).send("First name is required");
-        // if(!lastName) return res.status(400).send("Last name is required");
-        // if(!email) return res.status(400).send("Email is required");
-        // if(!city) return res.status(400).send("City is required");
-        // if(!county) return res.status(400).send("County is required");
-        // if(!phone) return res.status(400).send("Phone is required");
-        if(!password || password.length < 6) {
-            return res
-            .status(400)
-            .send("Password is required and should be min 6 character long ");
-        }
         let userExist = await pool.query(
             "Select email, phone From users Where email = $1 Or phone = $2",
             [email, phone]
@@ -44,8 +33,8 @@ const register = async(req, res) => {
         // has password
         const hashedPassword = await hashPassword(password);
         const results = await pool.query(
-            "INSERT INTO users (first_name , last_name, email, password, city, country, county, phone) values ($1, $2, $3, $4, $5, $6, $7, $8) returning *",
-            [firstName.charAt(0).toUpperCase() + firstName.slice(1), lastName.charAt(0).toUpperCase() + lastName.slice(1), email, hashedPassword, city, country.name, state.name, phone]
+            "INSERT INTO users (first_name , last_name, email, password, country, county, city, phone) values ($1, $2, $3, $4, $5, $6, $7, $8) returning *",
+            [firstName.charAt(0).toUpperCase() + firstName.slice(1), lastName.charAt(0).toUpperCase() + lastName.slice(1), email, hashedPassword, country.name, city.name, phone]
           );
           
           console.log(results);

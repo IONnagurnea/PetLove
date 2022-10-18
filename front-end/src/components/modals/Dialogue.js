@@ -4,26 +4,31 @@ import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
 const Dialogue = ({details, showDialogue, setShowDialogue}) => {
 
-console.log(details.password);
-console.log(details.confirmPassword);
+//console.log(details.password);
+//console.log(details.confirmPassword);
 
     let colour1="red",colour2="red",colour3="red",colour4="red",colour5="red";
-      if(details.password.length >= "8")
-      { colour1="green";}
-      if(details.password.match(/[A-Z]/))
-      { colour2="green";} 
-      if(details.password.match(/[a-z]/))
-      { colour3="green";} 
-      if(details.password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/))
-      { colour4="green";} 
-      if(details.password === details.confirmPassword && details.password !== " " )
-      {colour5="green";}
+    if(details.password.length >= "8") { 
+      colour1="green";
+    }
+    if(details.password.match(/[A-Z]/)) { 
+      colour2="green";
+    } 
+    if(details.password.match(/[a-z]/)) { 
+      colour3="green";
+    } 
+    if(details.password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) { 
+      colour4="green";
+    } 
+    if(details.password === details.confirmPassword && details.password !== " " ) {
+      colour5="green";
+    }
 
-      if(details.password && details.password.length >= "8" && details.password.match(/[A-Z]/) && 
-            details.password.match(/[a-z]/) && details.password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/) && 
-            details.password === details.confirmPassword && details.password !== " "){
-                setShowDialogue(false);
-        };
+    if(details.password && details.password.length >= "8" && details.password.match(/[A-Z]/) && 
+      details.password.match(/[a-z]/) && details.password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/) && 
+      details.password === details.confirmPassword && details.password !== " ") {
+        setShowDialogue(false);
+    };
 
       const style={
         boxShadow:"2px 2px 3px 3px #ccc",

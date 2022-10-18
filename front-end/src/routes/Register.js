@@ -57,15 +57,16 @@ const Register = () => {
     const handleChange = (e) => {
         setDetails(prev=>({ ...prev, [e.target.id]: e.target.value }))
     }
-    console.log(phone);
- //console.log("countries =>", Country.getAllCountries());
-//  console.log("state =>", State.getStatesOfCountry(address.country.isoCode));
-//  console.log("city =>", City.getCitiesOfState(address.state.countryCode, "ENG"));
-//  console.log(address.country);
-//  console.log(address.state);
-//  console.log(address.state.countryCode);
-    //console.log(address.country.name);
- 
+
+    //console.log(phone);
+    //console.log("countries =>", Country.getAllCountries());
+    //console.log("state =>", State.getStatesOfCountry(address.country.isoCode));
+    //console.log("city =>", City.getCitiesOfState(address.state.countryCode, "ENG"));
+    //console.log(address.country);
+    //console.log(address.state);
+    //console.log(address.state.countryCode);
+    console.log(address.city.name);
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!details.password.length >= "8") {
@@ -88,9 +89,9 @@ const Register = () => {
             //toast.error('Passwords and confirm passwor do not match');
             return;
         };
-        if (phone.length !== 13) {
+        if (!(phone.match('[0-9]{13}'))) {
             //toast.error('Insert a valid phone number');
-            console.log("phone not valid =>", phone.length);
+            //console.log("phone not valid");
             return;
         }
         try {

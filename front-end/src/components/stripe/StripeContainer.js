@@ -4,7 +4,7 @@ import React from "react"
 import CardPayment from "./CardPayment"
 
 
-const promise = loadStripe(window.env.PUBLIC_STRIPE_KEY)
+const promise = loadStripe(process.env.REACT_APP_PUBLIC_STRIPE_KEY);
 console.log(promise);
 export default function StripeContainer() {
 	return (
