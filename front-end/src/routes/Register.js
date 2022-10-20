@@ -6,26 +6,44 @@ import "../styles/login.css";
 import Header from "../components/Header";
 import PhoneInput from 'react-phone-number-input';
 import { Country, State, City }  from 'country-state-city';
-import Select from "react-select";
+import {FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 import 'react-phone-number-input/style.css';
-import Dialogue from '../components/modals/Dialogue';
-//import {toast} from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { usePasswordValidation } from "../hooks/usePasswordValidation";
+import { phoneValidation } from "../hooks/phoneValidation"
+import { emailValidation } from "../hooks/emailValidation"
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
     const [details, setDetails] = useState({
         firstName: " ",
         lastName: " ",
         email: " ",
-        password: " ",
-        confirmPassword: " ",
     })
+    const [password, setPassword] = useState({
+        userPassword: "",
+        confirmUserPassword: "",
+    });
+    const [country, setCountry] = useState("");
+    const [state, setState] = useState("");
+    const [city, setCity] = useState("");
 
-    const [address, setAddress] = useState({
-        country: " ",
-        state: null,
-        city: null
-    })
+   
 
+    const [
+        validLength,
+        hasNumber,
+        upperCase,
+        lowerCase,
+        match,
+        specialChar,
+        ] = usePasswordValidation({
+        userPassword: password.userPassword,
+        confirmUserPassword: password.confirmUserPassword,
+        });
+    
     const [phone, setPhone] = useState("");
     const [showDialogue, setShowDialogue] = useState(false);
   
@@ -37,107 +55,142 @@ const Register = () => {
         if (user !== null) navigate("/signin");
     }, [user]);
 
-   
-    const updatedCountries = Country.getAllCountries().map((country) => ({
-        label: country.name,
-        value: country.isoCode,
-        ...country
-    }));
-
-    const updatedStates = (countryCode) =>
-        State
-          .getStatesOfCountry(countryCode)
-          .map((state) => ({ label: state.name, value: state.isoCode, ...state }));
-    const updatedCities = (countryCode, stateCode) =>
-        City
-          .getCitiesOfCountry(countryCode)
-          .map((city) => ({ label: city.name, value: city.isoCode, ...city }));
-    
-
     const handleChange = (e) => {
         setDetails(prev=>({ ...prev, [e.target.id]: e.target.value }))
     }
 
-    //console.log(phone);
-    //console.log("countries =>", Country.getAllCountries());
-    //console.log("state =>", State.getStatesOfCountry(address.country.isoCode));
-    //console.log("city =>", City.getCitiesOfState(address.state.countryCode, "ENG"));
-    //console.log(address.country);
-    //console.log(address.state);
-    //console.log(address.state.countryCode);
-    //console.log(address.city.name);
+    const handlePassword = (e) => {
+        setPassword({ ...password, userPassword: e.target.value });
+      };
+    const handleConfirmPassword = (e) => {
+        setPassword({ ...password, confirmUserPassword: e.target.value });
+    };
+    const setDialogue = (e) => {
+        if(validLength && upperCase && lowerCase && hasNumber && specialChar && match ) {
+            setShowDialogue(false);
+          };
+    };
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!details.password.length >= "8") {
-            //toast.error('Passwords must contain at least 8 characters');
-            return;
-        };
-        if (!details.password.match(/[A-Z]/)) {
-            //toast.error('Password must contain at least 1 uppercase letter');
-            return;
-        };
-        if(!details.password.match(/[a-z]/)) {
-            //toast.error('Password must contain at least 1 lowercase letter');
-            return;
-        };
-        if(!details.password.match(/[\d`~!@#$%\^&*()+=|;:'",.<>\/?\\\-]/)) {
-            //toast.error('Password must contain at least 1 special character');
+        //email validation
+        const emailIsValid = await emailValidation(details.email);
+        if (!emailIsValid) { 
+            toast.error('Insert a valid email');
+            console.log("Email not valid");
             return;
         }
-        if (details.password !== details.confirmPassword && details.password === " ") {
-            //toast.error('Passwords and confirm passwor do not match');
+        //check is password has the required lengh
+        if(!validLength) {
+            toast.error('Passwords must contain at least 8 characters');
+            console.log("Passwords must contain at least 8 characters");
             return;
         };
-        if (!(phone.match('[0-9]{13}'))) {
-            //toast.error('Insert a valid phone number');
-            //console.log("phone not valid");
+        //check if password includes an uppercase letter
+        if(!upperCase) {
+            toast.error('Password must contain at least 1 uppercase letter');
+            console.log("Password must contain at least 1 uppercase letter");
+            return;
+        };
+        //check if password includes a lowercase letter
+        if(!lowerCase) {
+            toast.error('Password must include at least 1 lowercase letter');
+            console.log("Password must include at least 1 lowercase letter");
+            return;
+        };
+        //check if password includes a number
+        if(!hasNumber) {
+            toast.error('Password must cinclude a number');
+            console.log("Password must cinclude a number");
             return;
         }
+        // check if password inclused a special character
+        if(!specialChar) {
+            toast.error('Passwords must include a special charcter');
+            console.log("Passwords must include a special charcter");
+            return;
+        };
+        //check if passowrds matching
+        if(!match) {
+            toast.error('Password does not match');
+            console.log("Password not matching");
+            return;
+        };
+       
+        //phone validation
+        const phoneIsValid = await phoneValidation(phone);
+        //console.log(phoneIsValid);
+        if (!phoneIsValid) { 
+            toast.error('Insert a valid phone number');
+            console.log("phone not valid");
+            return;
+        }
+        
         try {
             const results = await axios.post("/register",
-            {details, address, phone}
+            {details, password, country, state, city, phone}
             );
-            //toast.success('Registration succesful. Please login.');
+            toast.success('Registration succesful. Please login.');
             
             setDetails({
                 firstName: " ",
                 lastName: " ",
                 email: " ",
-                password: " ",
-                confirmPassword: " ",
-                country: " ",
-                city: null,
-                county: null,
-                phone: " "
             });
-            setAddress({
-                country: " ",
-                state: null,
-                city: null
-            });
+            setPassword({
+                userPassword: "",
+                confirmUserPassword: "",
+            })
+            setCountry("");
+            setState("");
+            setCity("");
             setPhone ("");
             dispatch({ type: 'LOGIN_START'});
             navigate("../signin");    
         } catch (err) {
             console.log(err);
-            //toast.error(err.response.data);
+            toast.error(err.response.data);
 
         }   
     };
+
+    // password dialogue
+    let colour1="red",colour2="red",colour3="red",colour4="red",colour5="red",colour6="red";
+    if(validLength) colour1="green";
+    if(upperCase) colour2="green";
+    if(lowerCase) colour3="green";
+    if(hasNumber) colour4="green";
+    if(specialChar) colour5="green";
+    if(match) colour6="green";
+   
+    const style={
+        boxShadow:"2px 2px 3px 3px #ccc",
+        border:"2px #eee",
+        padding:"20px",
+        marginTop:"25px"
+    }
+
+console.log("Password =>", password.userPassword);
+console.log("Confirm Password =>", password.confirmUserPassword);
+console.log("details =>", details);
+console.log("country =>", country);
+console.log("county =>", state);
+console.log("city =>", city);
+console.log("phone =>", phone);
   return (
     <div>  
         <Header />
         <div className="login">
             <form id="rContainer" onSubmit={handleSubmit}>
+                <ToastContainer />
                 <h2>Register</h2>
                 <input 
                     type="text" 
                     className="rInput" 
                     placeholder="First Name" 
                     id="firstName"
-                    onFocus={()=>setShowDialogue(false)}
-                    onChange={handleChange} 
+                    onChange={handleChange}
+                    onFocus={()=>setShowDialogue(false)} 
                     required
                 />
                 <input 
@@ -145,8 +198,8 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Last Name" 
                     id="lastName"
-                    onFocus={()=>setShowDialogue(false)}
                     onChange={handleChange} 
+                    onFocus={()=>setShowDialogue(false)}
                     required
                 />
                 <input 
@@ -154,8 +207,8 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Enter email" 
                     id="email"
-                    onFocus={()=>setShowDialogue(false)}
                     onChange={handleChange} 
+                    onFocus={()=>setShowDialogue(false)}
                     required
                 />
                 <input 
@@ -163,8 +216,8 @@ const Register = () => {
                     className="rInput" 
                     placeholder="Enter password" 
                     id="password"
+                    onChange={handlePassword} 
                     onFocus={()=>setShowDialogue(true)}
-                    onChange={handleChange} 
                     pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" 
                     title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
                     autoComplete="on"
@@ -176,53 +229,93 @@ const Register = () => {
                     placeholder="Confirm password" 
                     id="confirmPassword"
                     onFocus={()=>setShowDialogue(true)}
-                    onChange={handleChange} 
+                    onChange={handleConfirmPassword} 
+                    onBlur={setDialogue}
                     autoComplete="on"
                     required
                 />
-                <Dialogue details={details} showDialogue={showDialogue} setShowDialogue={setShowDialogue}/>
-                <Select
-                    className="rSelect"  
-                    id="country"
-                    name="country"
-                    label="country"
-                    onFocus={()=>setShowDialogue(false)}
-                    options={updatedCountries}
-                    value={address.country}
-                    onChange={(value) => {
-                        setAddress({ country: value, state: null, city: null }, false);
-                      }} 
-                    required
-                />
-                <Select
-                    className="rSelect"  
-                    id="state"
-                    name="state"
-                    onFocus={()=>setShowDialogue(false)}
-                    options={updatedStates(address.country ? address.country.isoCode : null)}
-                    value={address.state}
-                    onChange={(value) => {
-                        setAddress({ country: address.country, state: value, city: null }, false)
-                        }} 
-                    required
-                />
-                <Select 
-                    className="rSelect" 
-                    id="city"
-                    name="city"
-                    onFocus={()=>setShowDialogue(false)}
-                    options={updatedCities(address.state ? (address.state.countryCode) : (null))}
-                    value={address.city}
-                    onChange={(value) => {
-                        setAddress({ country: address.country, state: address.state, city: value })
-                        }} 
-                    required
-                />
-                <PhoneInput 
-                    className="rInput" 
+                {showDialogue && 
+                  <div style={style}>
+                    <p style={{fontWeight:"bold"}}>All checkmarks must turn green, password must have:</p>
+                    <p><FontAwesomeIcon icon={faCircleCheck} style={{color:colour1,fontSize:"20px"}} aria-hidden="true"/> At least 8 characters</p>
+                    <p><FontAwesomeIcon icon={faCircleCheck} style={{color:colour2,fontSize:"20px"}} aria-hidden="true"/> At least 1 uppercase letter</p>
+                    <p><FontAwesomeIcon icon={faCircleCheck} style={{color:colour3,fontSize:"20px"}} aria-hidden="true"/> At least 1 lowercase letter</p>
+                    <p><FontAwesomeIcon icon={faCircleCheck} style={{color:colour4,fontSize:"20px"}} aria-hidden="true"/> At least 1 number</p>
+                    <p><FontAwesomeIcon icon={faCircleCheck} style={{color:colour5,fontSize:"20px"}} aria-hidden="true"/> At least 1 special character</p>
+                    <p><FontAwesomeIcon icon={faCircleCheck} style={{color:colour6,fontSize:"20px"}} aria-hidden="true"/> Password === Confirm Password</p>
+                  </div>}
+                <FormControl>
+                    <InputLabel id="country">Country</InputLabel>
+                    <Select
+                        id="rSelect" 
+                        labelId="country"
+                        defaultValue=""
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value) } 
+                        onFocus={()=>setShowDialogue(false)}
+                        required
+                    >
+                    {Country.getAllCountries().map((country, index) => (
+                        <MenuItem
+                            key={index}
+                            value={country}
+                        >
+                            {country.name}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </FormControl>
+                <FormControl>
+                    <InputLabel id="county">County</InputLabel>
+                    <Select
+                        labelId="county"
+                        id="rSelect"  
+                        defaultValue=""
+                        value={state.length ? state : ""}
+                        onChange={(e) => setState(e.target.value)} 
+                        disabled={!country}
+                        onFocus={()=>setShowDialogue(false)}
+                        required
+                    >
+                        {State.getStatesOfCountry(country.isoCode).map((state, index) => (
+                            <MenuItem
+                            value={state.name}
+                            key={index}
+                            >
+                                {state.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControl>
+                    <InputLabel id="city">City</InputLabel>
+                    <Select
+                        labelId="city"
+                        id="rSelect"
+                        defaultValue=""  
+                        value={city.length ? city : ''}
+                        onChange={(e) => setCity(e.target.value)} 
+                        disabled={!country}
+                        onFocus={()=>setShowDialogue(false)}
+                        required
+                    >
+                    {City.getCitiesOfCountry(country.isoCode).map((city, index) => (
+                        <MenuItem
+                        value={city.name}
+                        key={index}
+                        >
+                            {city.name}
+                        </MenuItem>
+                    ))}
+                    </Select>
+                </FormControl>
+                
+                
+                
+                <PhoneInput  
                     placeholder="Enter phone number" 
-                    onFocus={()=>setShowDialogue(false)}
                     onChange={(value) => setPhone(value)} 
+                    onFocus={()=>setShowDialogue(false)}
                     required
                 />
                 <button 
@@ -232,7 +325,7 @@ const Register = () => {
                 >
                     Sign Up
                 </button>
-                {error && <span>{error.message}</span>}
+                {/* {error && <span>{error.message}</span>} - update the error state if toastify does not work */}
                 <p className="text-center p-3">
                 Already registered?{" "}
                 <Link to="/signin">

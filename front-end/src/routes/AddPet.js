@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Resizer from 'react-image-file-resizer';
 import PetForm from "../components/forms/PetForm";
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddPet = () => {
 
@@ -70,11 +72,11 @@ const AddPet = () => {
                 setImages(data.map(item => item.Location));
                 setPets({...pets, loading:false}); 
             }));   
-            console.log("Galery => ", galery);   
+            //console.log("Galery => ", galery);   
         } catch (err) {
             console.log(err);
             setPets({...pets, loading:false});
-            // toast('Image upload failed. Try later.');
+            toast('Image upload failed. Try later.');
         }
         
     };
@@ -88,7 +90,7 @@ const AddPet = () => {
 
             const res = await axios.post('/pets/remove-image', { image });
 
-            console.log(res);
+            console.log("image removed =>", res);
             return
 
             // setPets({...pets, loading: true});
@@ -97,7 +99,7 @@ const AddPet = () => {
         } catch (err) {
             console.log(err);
             setPets({ ...pets, loading: false });
-            // toast("Image upload failed. Try later.");
+            toast("Image remove failed.");
         }
     };
 
@@ -138,7 +140,7 @@ const AddPet = () => {
             console.log(err);
             setPets({...pets, loading:false});
             setUploading(false);
-            // toast("Video upload failed");
+            toast("Video upload failed");
         }
         
     };
@@ -160,7 +162,7 @@ const AddPet = () => {
           console.log(err);
           setUploading(false);
           setPets({...pets, loading: false});
-        //   toast("Video remove failed");
+          toast("Video remove failed");
         }
     };
 
@@ -188,6 +190,7 @@ const AddPet = () => {
     return ( 
         <div>
             <Header />
+            <ToastContainer />
             <PetForm 
                 handleChange={handleChange}
                 handleImage={handleImage}

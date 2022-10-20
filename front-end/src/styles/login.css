@@ -25,6 +25,12 @@ h2 {
     height: 100%;
   }
 
+  #rSelect {
+    height: 20px;
+    padding: 9px;
+    border: none;
+  }
+
   .lContainer .lInput{
     height: 40px;
     padding: 10px;

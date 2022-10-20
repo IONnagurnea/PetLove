@@ -17,24 +17,21 @@ const SES = new AWS.SES(awsConfig);
 const register = async(req, res) => {
     try {
         //console.log("The data =>", req.body)
-        const {firstName, lastName, email, password} = req.body.details;
-        const {country, state, city} = req.body.address;
-        const {phone} = req.body.phone;
-        // console.log(firstName);
-        // console.log(country.name);
-        // console.log(state.name);
-        // console.log(city);
-        //return;
+        const {firstName, lastName, email} = req.body.details;
+        const {userPassword} = req.body.password;
+        const {name} = req.body.country;
+        const {state, city, phone} = req.body;
+       
         let userExist = await pool.query(
             "Select email, phone From users Where email = $1 Or phone = $2",
             [email, phone]
         );
         if (userExist.rowCount !== 0) return res.status(400).send("Email and/or phone is taken")
         // has password
-        const hashedPassword = await hashPassword(password);
+        const hashedPassword = await hashPassword(userPassword);
         const results = await pool.query(
             "INSERT INTO users (first_name , last_name, email, password, country, county, city, phone) values ($1, $2, $3, $4, $5, $6, $7, $8) returning *",
-            [firstName.charAt(0).toUpperCase() + firstName.slice(1), lastName.charAt(0).toUpperCase() + lastName.slice(1), email, hashedPassword, country.name, city.name, phone]
+            [firstName.charAt(0).toUpperCase() + firstName.slice(1), lastName.charAt(0).toUpperCase() + lastName.slice(1), email, hashedPassword, name, state, city, phone]
           );
           
           console.log(results);

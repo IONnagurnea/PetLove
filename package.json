@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.17.1",
+    "npm": "8.19.2"
+  },
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "heroku-postbuild": "cd front-end && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -19,8 +24,10 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "nanoid": "^ 2.1.9",
-    "nodemon": "^2.0.19",
     "pg": "^8.8.0",
     "stripe": "^10.12.0-beta.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }

@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/login.css";
 import Header from "../components/Header";
-import {toast} from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Login =() => {
@@ -32,12 +33,12 @@ const Login =() => {
             const res = await axios.post("/login", credentials);
             //console.log(res.data);
             dispatch({type:"LOGIN_SUCCESS", payload: res.data});
-            navigate("/");
-            toast.success("You are logged in")
+            toast.success("You are logged in") 
+            navigate("/");  
         } catch (err) {
             console.log("this error =>", err.response.data.message);
             dispatch({type:"LOGIN_FAILURE", payload: err.response.data.message} );
-            toast(error);
+            toast.error(error);
         }
     }
     
@@ -46,6 +47,7 @@ const Login =() => {
         <Header />
         <div className="login">
             <form className="lContainer" onSubmit={handleSubmit} >
+                <ToastContainer />
                 <h2>Log In</h2>
                 <input 
                     type="text" 

@@ -13,7 +13,6 @@ const PetForm = ({
     handleChange,
     handleImage,
     handleImageRemove,
-    uploadButtonImage,
     preview,
     pets,
     uploading,
@@ -23,7 +22,6 @@ const PetForm = ({
     handleVideoRemove,
     handleSubmit,
     video,
-    images,
 }) => {
     return (
         <>
@@ -151,7 +149,7 @@ const PetForm = ({
                             <ImageList>
                                 {preview.map((image, index) => { 
                                     return (
-                                    <ImageListItem key={image} sx={{margin: 1}}>
+                                    <ImageListItem key={index} sx={{margin: 1}}>
                                         <IconButton
                                         sx={{ color: 'black' }}
                                         aria-label={`delete ${image}`}
