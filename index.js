@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const pool = require("./db");
 const { readdirSync } = require("fs");
+const path = require("path");
 
 const PORT = process.env.PORT || 5001
 
