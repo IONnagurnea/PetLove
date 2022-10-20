@@ -19,7 +19,7 @@ app.use(express.static(__dirname + '/public'))
 if (process.env.NODE_ENV === "production") {
     //server  static contend
     //npm run build
-    app.use(express.static(path.join(__dirname, "client/build")));
+    app.use(express.static(path.join(__dirname, "front-end/build")));
 }
 
 // route
