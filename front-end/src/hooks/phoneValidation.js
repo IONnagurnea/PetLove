@@ -1,5 +1,5 @@
 
-const apiKey = process.env.REACT_APP_PHONE_VALIDATION_KEY;
+const apiKey = "ddcfbfcbd8534a8f845402d08bf442c7"
 const apiURL = 'https://phonevalidation.abstractapi.com/v1/?api_key=' + apiKey;
 
 

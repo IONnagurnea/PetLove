@@ -1,4 +1,4 @@
-const apiKey = process.env.REACT_APP_EMAIL_VALIDATION_KEY;
+const apiKey = "faed99f1b8e542b09d976460ae973f1b";
 const apiURL = 'https://emailvalidation.abstractapi.com/v1/?api_key=' + apiKey;
 
 
