@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "production") {
 
 // route
 readdirSync('./routes').map((r) => 
-    app.use('/api', require(`./routes/${r}`))
+    app.use('/', require(`./routes/${r}`))
 );
 
 app.get("*", (req, res) => {
