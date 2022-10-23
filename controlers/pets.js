@@ -160,7 +160,8 @@ const postPets = async(req, res) => {
             },
           });
     } catch (err) {
-        console.log(err);    
+        console.log(err); 
+        return res.status(400).send("Please make sure you imput numbers for age and price");   
     }
 };
 

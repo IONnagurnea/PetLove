@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS pets (
     type VARCHAR(20) NOT NULL,
     gender VARCHAR(20) NOT NULL,
     age INT NOT NULL,
-    bread VARCHAR(20) NOT NULL,
+    breed VARCHAR(20) NOT NULL,
     origin VARCHAR(50) NOT NULL,
     colour VARCHAR(50) NOT NULL,
     description VARCHAR(200) NOT NULL,

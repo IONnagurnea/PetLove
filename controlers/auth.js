@@ -133,7 +133,8 @@ const forgotPassword = async (req, res) => {
             return res.json({ok: true});
         })
         .catch((err) => {
-            console.log(err);
+            console.log("Email address is not verified. Try later");
+            return res.status(401).send("Email address is not verified. Try later");
         })
     } catch (err) {
         console.log(err)

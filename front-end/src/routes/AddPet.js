@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Resizer from 'react-image-file-resizer';
 import PetForm from "../components/forms/PetForm";
-import {ToastContainer, toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const AddPet = () => {
 
@@ -14,8 +13,8 @@ const AddPet = () => {
 
     const [pets, setPets] = useState({
         name: " ",
-        type: " ",
-        bread: " ",
+        type: "Dog",
+        breed: " ",
         gender: "Male",
         age: " ",
         origin: " ",
@@ -23,7 +22,7 @@ const AddPet = () => {
         description: " ",
         licence: " ",
         price: " ",
-        vaccinated: " ",
+        vaccinated: "Yes",
         loading: false, 
     });
 
@@ -115,11 +114,11 @@ const AddPet = () => {
                 console.log("REMOVED ===> ", res);
             }
             // upload a new video
-           const file = e.target.files[0]; //get the file
-            setUploadButtonVideo(file.name); //change the state
+           const file = e.target.files[0];
+            setUploadButtonVideo(file.name); 
             setUploading(true);
 
-            const videoData = new FormData(); // using the browser api
+            const videoData = new FormData(); 
             videoData.append("video", file);
             // save progress bar and send video as form data to backend
             const { data } = await axios.post(
@@ -168,29 +167,52 @@ const AddPet = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        //console.log("pet name =>", pets.name.length);
+        // console.log(images);
+        // console.log(video);
+        // console.log(user.id);
+        if(pets.name.length < 3 ) { 
+            toast.error('Insert name');
+            //console.log('Insert a name');
+            return;
+        }
+        if (pets.breed.length < 3) { 
+            toast.error('Insert breed');
+            return;
+        }
+        if (pets.origin.length < 2) { 
+            toast.error('Insert origin');
+            return;
+        }
+        if (pets.colour.length < 3) { 
+            toast.error('Insert colour');
+            return;
+        }
+        if (pets.description.length < 5) { 
+            toast.error('Insert description');
+            return;
+        }
+        if (pets.licence.length < 5) { 
+            toast.error('Insert licence');
+            return;
+        }
         try {
-        
-            console.log(pets);
-            console.log(images);
-            console.log(video);
-            console.log(user.id);
             const {data} = await axios.post("/pets", {
                 ...pets,
                 images,
                 video,
                 user,
             });
-            // // toast("Great! Noe you can start adding lessons");
+            toast.success("Great! Now you can see your add on front page");
             navigate("/");
         } catch (err) {
-            // toast(err.response.data);
+            toast.error(err.response.data);
         }  
     };
    
     return ( 
         <div>
             <Header />
-            <ToastContainer />
             <PetForm 
                 handleChange={handleChange}
                 handleImage={handleImage}

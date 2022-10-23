@@ -2,31 +2,56 @@ h2 {
     text-align: center;
 }
 
-.screen {
+#formScreen {
     display: block;
     margin: auto;
     padding: auto;
     margin-top: 50px;
     height: 100vh;
+    width: 100%;
 }
-
-.fContainer {
+#centerContainer {
     display: flex;
     justify-content: center;
-    align-items: stretch;
+}
+
+#formAddPet {
+    width: 90%;
+}
+
+#fContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch; 
 }
 
 .column {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: 35%;
+    gap: 7px;
+    width: 45%;
     height: 100%;
     padding: 2em;  
 }
 
-.column input, textarea{
+.column input {
     text-transform: capitalize; 
+}
+
+#formAddPet input, select, textarea {
+    text-transform: capitalize; 
+    height: 35px;
+    border-radius: 5px;
+    border-color: silver;
+    padding-left: 5px;
+    color: grey;
+}
+#formAddPet input:focus, select:focus, textarea:focus, textarea:focus {
+    color: black;
+}
+
+#formAddPet .images input {
+    height: 50px;  
 }
 
 .images {

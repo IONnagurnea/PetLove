@@ -2,7 +2,8 @@ import React, { useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import {toast} from 'react-toastify';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const ForgotPawwsord = () => {
@@ -30,13 +31,12 @@ const ForgotPawwsord = () => {
         try {
             const { data } = await axios.post("/forgot-password", { email });
             setSuccess(true);
-            toast("Check your email for secret code");
+            toast.success("Check your email for secret code");
             setLoading(false);
         } catch (err) {
-            console.log("Error => ", err.response.data.message);
+            console.log("Error => ", err);
             setLoading(false);
-            toast("User not found");
-            
+            toast.error(err.response.status === 400 ? err.response.data.message : err.response.data); 
         }
     };
 
@@ -60,12 +60,12 @@ const ForgotPawwsord = () => {
             setCode('');
             setNewPassword('');
             setLoading(false);
-            toast("Great! Now you can login with your new password");
+            toast.success("Great! Now you can login with your new password");
             navigate('/signin');
         } catch (err) {
             console.log("Error =>", err.response.data.message);
             setLoading(false);
-            toast("Wrong code or email!");
+            toast.error("Wrong code or email!");
         }
     };
 
@@ -74,6 +74,7 @@ const ForgotPawwsord = () => {
             <h1 className="jumbotron text-center bg-primary square">
                 Forgot password
             </h1>
+            <ToastContainer />
             <div className="conatiner col-md-4 offset-md-4 pb-5">
                 <form onSubmit={success ? handleResetPassword : handleSubmit}>
                     <input  

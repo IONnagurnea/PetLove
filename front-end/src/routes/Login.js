@@ -36,7 +36,7 @@ const Login =() => {
             toast.success("You are logged in") 
             navigate("/");  
         } catch (err) {
-            console.log("this error =>", err.response.data.message);
+            //console.log("this error =>", err.response.data.message);
             dispatch({type:"LOGIN_FAILURE", payload: err.response.data.message} );
             toast.error(error);
         }
