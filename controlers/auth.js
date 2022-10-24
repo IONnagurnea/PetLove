@@ -145,7 +145,7 @@ const forgotPassword = async (req, res) => {
 const resetPassword  = async (req, res) => {
     try {
         const {email, code, newPassword} = req.body;
-        console.table({email, code, newPassword});
+        //console.table({email, code, newPassword});
         const hashedPassword = await hashPassword(newPassword);
 
         const user = await pool.query(
@@ -165,7 +165,7 @@ const resetPassword  = async (req, res) => {
 const sendContact = async (req, res) => {
     try {
         const { email, firstName, phone } = req.body;
-        console.log(req.body);
+        //console.log(req.body);
 
         //prepare for email
         const params = {

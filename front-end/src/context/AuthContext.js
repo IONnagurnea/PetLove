@@ -61,6 +61,14 @@ const AuthReducer = (state, action) => {
                 stripeStatus: false,
                 paypalStatus: true,
             };
+        case "PAYPAL_FAILURE":
+            return {
+                user: JSON.parse(localStorage.getItem("user")),
+                loading: false,
+                error: action.payload,
+                stripeStatus: false,
+                paypalStatus: false,
+            };
         case "CONTACT_HIDE": 
             return {
                 user: JSON.parse(localStorage.getItem("user")),

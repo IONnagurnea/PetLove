@@ -67,15 +67,15 @@ const AddPet = () => {
                     images: galery
                 })
             
-                console.log("Images uploaded => " , await data)
+                //console.log("Images uploaded => " , await data)
                 setImages(data.map(item => item.Location));
                 setPets({...pets, loading:false}); 
             }));   
             //console.log("Galery => ", galery);   
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             setPets({...pets, loading:false});
-            toast('Image upload failed. Try later.');
+            toast.error('Image upload failed. Try later.');
         }
         
     };
@@ -89,16 +89,16 @@ const AddPet = () => {
 
             const res = await axios.post('/pets/remove-image', { image });
 
-            console.log("image removed =>", res);
+            //console.log("image removed =>", res);
             return
 
             // setPets({...pets, loading: true});
             // setImages(images.filter(images[0] => images.splice[images[0]]));
             // setPets({...pets, loading: false});
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             setPets({ ...pets, loading: false });
-            toast("Image remove failed.");
+            toast.error("Image remove failed.");
         }
     };
 
@@ -139,7 +139,7 @@ const AddPet = () => {
             console.log(err);
             setPets({...pets, loading:false});
             setUploading(false);
-            toast("Video upload failed");
+            toast.error("Video upload failed");
         }
         
     };
@@ -161,7 +161,7 @@ const AddPet = () => {
           console.log(err);
           setUploading(false);
           setPets({...pets, loading: false});
-          toast("Video remove failed");
+          toast.error("Video remove failed");
         }
     };
 

@@ -58,7 +58,7 @@ const uploadImage = async(req, res) => {
 const removeImage = async (req, res) => {
     try {
         const {image} = req.body;
-        console.log(image);
+        //console.log(image);
 
         //return // need to find the error
         //image params
@@ -84,7 +84,7 @@ const uploadVideo = async (req, res) => {
     try {
 
       const { video } = req.files;
-      console.log(video);
+      //console.log(video);
 
       if (!video) return res.status(400).send("No video");
   

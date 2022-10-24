@@ -3,13 +3,12 @@ import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from 'react-toastify';
 
 const Paypal = () => {
   const [sdkReady, setSdkReady] = useState();
 
   const { dispatch } = useContext(AuthContext);
-
-  const currency = "GBP";
 
   useEffect(() => {
     clientId();
@@ -18,7 +17,7 @@ const Paypal = () => {
   const clientId = async () => {
       const result = await axios.get("/paypal-payment");
       const id = result.data;
-      console.log("ID =>", id);
+      //console.log("ID =>", id);
       setSdkReady(id);
   };
 
@@ -33,10 +32,12 @@ const Paypal = () => {
   });
 
   const onApprove = (data, actions) => {
-    return actions.order.capture().then(() => {
-      dispatch({type:"PAYPAL_SUCCESS"});
-    
-    });
+    return actions.order.capture()
+      .then(() => { dispatch({type:"PAYPAL_SUCCESS"}); 
+      }).cath(error => { 
+        dispatch({type:"PAYPAL_FAILURE"});
+        toast.error('Paypal payment failed! Try again!');
+      });
   };
 
   return (
